@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Webscale. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="webscale" translate="label" sortOrder="9999" class="webscale-config-tab">
+            <label>Webscale</label>
+        </tab>
+        <section id="webscale_eventstream" translate="label"
+                 sortOrder="20"
+                 showInDefault="1" showInWebsite="1" showInStore="0">
+            <class>separator-top</class>
+            <label>Event Stream</label>
+            <tab>webscale</tab>
+            <resource>Webscale_EventStream::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>General</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="developer" translate="label" type="text" sortOrder="20"
+                   showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Developer</label>
+                <field id="logging" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Additional Logging</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

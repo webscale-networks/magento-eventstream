@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Webscale. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Webscale\EventStream\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">webscale-eventstream</argument>
+        </arguments>
+    </type>
+    <type name="Webscale\EventStream\Logger\Handler">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/webscale_eventstream.log</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\HTTP\Client\Curl">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="timeout" xsi:type="number">5</item>
+                <item name="connect_timeout" xsi:type="number">3</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
