@@ -94,16 +94,31 @@ class LoginSuccess implements ObserverInterface
             $appId = $this->request->getHeader('Webscale-App-Id');
             $payload = $this->getPayload($customer);
 
+            // limit connection time for request
+            $this->curl->setOptions([
+                CURLOPT_TIMEOUT => 5,
+                CURLOPT_CONNECTTIMEOUT => 1,
+                CURLOPT_RETURNTRANSFER => true
+            ]);
+
+            // set request headers
             $this->curl->setHeaders([
                 'Content-Type' => 'application/json',
                 'Webscale-App-Id' => $appId ?? ''
             ]);
+
+            // execute request
             $this->curl->post($endpoint, \json_encode($payload));
 
+            // get response data
             $status = $this->curl->getStatus();
             if ($status >= 200 && $status < 300) {
                 if ($this->getLogging()) {
-                    $this->logger->info('[Webscale_EventStream] Login payload sent', $payload);
+                    $this->logger->info('[Webscale_EventStream] Login payload sent', [
+                        'endpoint'  => $endpoint,
+                        'payload'  => $payload,
+                        'response' => $this->curl->getBody(),
+                    ]);
                 }
             } else {
                 $body = $this->curl->getBody();
@@ -137,24 +152,25 @@ class LoginSuccess implements ObserverInterface
      */
     protected function getPayload($customer): array
     {
-        return [
+        return [[
             "platform" => self::MODULE_PLATFORM,
-            "event_name" => self::MODULE_EVENT_LOGIN,
-            "event_id" => $this->generateUuidV4(),
-            "timestamp" => gmdate('c'),
-            "user" => [
-                "user_id" => (int)$customer->getId(),
-            ],
             "sdk" => "webscale/eventstream:" .  $this->getModuleVersion(self::MODULE_NAME),
+            "event_name" => self::MODULE_EVENT_LOGIN,
+            "event_id" =>  $this->generateUuidV4(),
+            "timestamp" => gmdate('c'),
+            "user"  =>  [
+                "user_id" => (string)$customer->getId(),
+                "magento" => [
+                    "store_id" => $this->storeManager->getStore()->getCode(),
+                    "website_id" => $this->storeManager->getWebsite()->getCode(),
+                ],
+            ],
             "payload" => [
                 "email" => (string)$customer->getEmail(),
                 "php_session_id" => (string)$this->cookieManager->getCookie('PHPSESSID') ?: '',
-                'x_magento_vary' => (string)$this->identifier->getValue(),
-                'store_code' => (int)$this->storeManager->getStore()->getCode(),
-                'website_code' => (int)$this->storeManager->getWebsite()->getCode(),
-            ],
-            "app_id" => $appId ?? ''
-        ];
+                "x_magento_vary" => $this->identifier->getValue(),
+            ]
+        ]];
     }
 
     /**
@@ -187,7 +203,8 @@ class LoginSuccess implements ObserverInterface
         $store = $this->storeManager->getStore();
 
         // base URL per store + path
-        return rtrim($store->getBaseUrl(UrlInterface::URL_TYPE_WEB), '/') . self::ENDPOINT_PATH;
+        return 'https://m2-sandbox.webscale.support'  . self::ENDPOINT_PATH;
+        // return rtrim($store->getBaseUrl(UrlInterface::URL_TYPE_WEB), '/') . self::ENDPOINT_PATH;
     }
 
     /**
