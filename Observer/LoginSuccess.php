@@ -203,8 +203,7 @@ class LoginSuccess implements ObserverInterface
         $store = $this->storeManager->getStore();
 
         // base URL per store + path
-        return 'https://m2-sandbox.webscale.support'  . self::ENDPOINT_PATH;
-        // return rtrim($store->getBaseUrl(UrlInterface::URL_TYPE_WEB), '/') . self::ENDPOINT_PATH;
+        return rtrim($store->getBaseUrl(UrlInterface::URL_TYPE_WEB), '/') . self::ENDPOINT_PATH;
     }
 
     /**
