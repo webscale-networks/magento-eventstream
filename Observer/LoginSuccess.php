@@ -48,7 +48,7 @@ class LoginSuccess implements ObserverInterface
 
     private const MODULE_EVENT_LOGIN = 'login';
 
-    private const COOKIE_ID = 'wsd_uid';
+    private const COOKIE_ID = 'wbs_uid';
 
     private ScopeConfigInterface $scopeConfig;
 
