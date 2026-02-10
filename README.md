@@ -1,13 +1,17 @@
 # Webscale EventStream
+
 Enables the setup and configuration of the Webscale EventStream extension.
 
 ## Installation
+
 To install extension start with the following in magento root directory to add repository:
+
 ```console
 composer config repositories.webscale-magento-eventstream git https://github.com/webscale-networks/magento-eventstream.git
 ```
 
 To avoid issues with CI/CD and GitHub, add `"no-api": true` to the repository settings so it looks like this:
+
 ```console
 "webscale-magento-eventstream": {
     "type": "git",
@@ -17,6 +21,7 @@ To avoid issues with CI/CD and GitHub, add `"no-api": true` to the repository se
 ```
 
 Now require the extension itself:
+
 ```console
 composer require webscale-networks/magento-eventstream
 ```
@@ -34,6 +39,7 @@ Once completed log in to the Magento admin panel and proceed to configuring the 
 ## Configuration
 
 To enter the credentials open a browser and log in to the Magento admin. Next, navigate to:
+
 ```
 Stores > Configuration > Webscale > EventStream
 ```

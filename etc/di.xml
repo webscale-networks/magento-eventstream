@@ -5,26 +5,32 @@
  * See LICENSE for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Webscale\EventStream\Logger\Handler">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Webscale\EventStream\Logger\Handler" type="Magento\Framework\Logger\Handler\Base">
         <arguments>
-            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="fileName" xsi:type="string">/var/log/webscale_eventstream.log</argument>
         </arguments>
-    </type>
-    <type name="Webscale\EventStream\Logger\Logger">
+    </virtualType>
+    <virtualType name="Webscale\EventStream\Logger\Logger" type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="name" xsi:type="string">webscale-eventstream</argument>
-            <argument name="handlers"  xsi:type="array">
+            <argument name="handlers" xsi:type="array">
                 <item name="system" xsi:type="object">Webscale\EventStream\Logger\Handler</item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
     <type name="Magento\Framework\HTTP\Client\Curl">
         <arguments>
             <argument name="options" xsi:type="array">
                 <item name="timeout" xsi:type="number">5</item>
                 <item name="connect_timeout" xsi:type="number">3</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Webscale\EventStream\Observer\LoginSuccess">
+        <arguments>
+            <argument name="logger" xsi:type="object">Webscale\EventStream\Logger\Logger</argument>
         </arguments>
     </type>
 </config>
